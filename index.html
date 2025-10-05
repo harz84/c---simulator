@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>C++ Interactive Simulator</title>
-    <script src="https://cdn.jsdelivr.net/npm/jscpp/dist/JSCPP.es5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jscpp/dist/JSCPP.es5.min.js" defer></script>
     <style>
         * {
             margin: 0;
@@ -142,6 +142,7 @@
 
         .button-group {
             display: flex;
+            flex-wrap: wrap;
             gap: 15px;
             margin-bottom: 20px;
         }
@@ -174,6 +175,15 @@
 
         .clear-btn:hover {
             background: #545b62;
+        }
+
+        .save-btn {
+            background: #28a745;
+            color: white;
+        }
+
+        .save-btn:hover {
+            background: #218838;
         }
 
         .output-section {
@@ -239,53 +249,29 @@
             <div class="sidebar">
                 <h2>📚 Contoh Kode</h2>
                 <div class="example-list">
-                    <div class="example-item active" data-example="hello">
-                        Hello World
-                    </div>
-                    <div class="example-item" data-example="variables">
-                        Variables & Data Types
-                    </div>
-                    <div class="example-item" data-example="input">
-                        Input & Output
-                    </div>
-                    <div class="example-item" data-example="operators">
-                        Operators
-                    </div>
-                    <div class="example-item" data-example="ifelse">
-                        If-Else Statement
-                    </div>
-                    <div class="example-item" data-example="loops">
-                        Loops (For & While)
-                    </div>
-                    <div class="example-item" data-example="array">
-                        Arrays
-                    </div>
-                    <div class="example-item" data-example="function">
-                        Functions
-                    </div>
+                    <div class="example-item active" data-example="hello">Hello World</div>
+                    <div class="example-item" data-example="variables">Variables & Data Types</div>
+                    <div class="example-item" data-example="input">Input & Output</div>
+                    <div class="example-item" data-example="operators">Operators</div>
+                    <div class="example-item" data-example="ifelse">If-Else Statement</div>
+                    <div class="example-item" data-example="loops">Loops (For & While)</div>
+                    <div class="example-item" data-example="array">Arrays</div>
+                    <div class="example-item" data-example="function">Functions</div>
                 </div>
             </div>
 
             <div class="editor-section">
-                <div class="concept-explanation" id="explanation">
-                    <h3>👋 Hello World Program</h3>
-                    <p>Program pertama dalam C++ biasanya adalah "Hello World". Program ini menampilkan teks ke layar menggunakan <code>cout</code>. Header <code>&lt;iostream&gt;</code> diperlukan untuk input/output, dan <code>using namespace std;</code> memungkinkan kita menggunakan fungsi standar tanpa prefix <code>std::</code>.</p>
-                </div>
+                <div class="concept-explanation" id="explanation"></div>
 
                 <label class="editor-label">💻 Editor Kode C++</label>
                 <div class="editor-wrapper">
-                    <textarea id="codeEditor">#include <iostream>
-using namespace std;
-
-int main() {
-    cout << "Hello, World!" << endl;
-    return 0;
-}</textarea>
+                    <textarea id="codeEditor"></textarea>
                 </div>
 
                 <div class="button-group">
                     <button class="run-btn" onclick="runCode()">▶️ Jalankan Kode</button>
                     <button class="clear-btn" onclick="clearOutput()">🗑️ Hapus Output</button>
+                    <button class="save-btn" onclick="saveToFile()">💾 Simpan ke File</button>
                 </div>
 
                 <label class="output-label">📤 Output</label>
@@ -297,126 +283,133 @@ int main() {
     </div>
 
     <script>
+        // ==========================
+        // Data Contoh Kode
+        // ==========================
         const examples = {
             hello: {
                 title: "👋 Hello World Program",
-                explanation: "Program pertama dalam C++ biasanya adalah \"Hello World\". Program ini menampilkan teks ke layar menggunakan <code>cout</code>. Header <code>&lt;iostream&gt;</code> diperlukan untuk input/output, dan <code>using namespace std;</code> memungkinkan kita menggunakan fungsi standar tanpa prefix <code>std::</code>.",
+                explanation: "Program pertama dalam C++ biasanya adalah \"Hello World\". Program ini menampilkan teks ke layar menggunakan <code>cout</code>.",
                 code: `#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << "Hello, World!" << endl;\n    return 0;\n}`
             },
             variables: {
                 title: "📦 Variables & Data Types",
-                explanation: "Variabel adalah wadah untuk menyimpan data. C++ memiliki berbagai tipe data seperti <code>int</code> (bilangan bulat), <code>float</code> dan <code>double</code> (bilangan desimal), <code>char</code> (karakter), dan <code>string</code> (teks). Setiap variabel harus dideklarasikan dengan tipe datanya.",
+                explanation: "Variabel digunakan untuk menyimpan data dalam program.",
                 code: `#include <iostream>\nusing namespace std;\n\nint main() {\n    int umur = 25;\n    float tinggi = 175.5;\n    char grade = 'A';\n    string nama = "Budi";\n    \n    cout << "Nama: " << nama << endl;\n    cout << "Umur: " << umur << " tahun" << endl;\n    cout << "Tinggi: " << tinggi << " cm" << endl;\n    cout << "Grade: " << grade << endl;\n    \n    return 0;\n}`
             },
             input: {
                 title: "⌨️ Input & Output",
-                explanation: "C++ menggunakan <code>cin</code> untuk menerima input dari user dan <code>cout</code> untuk menampilkan output. Operator <code>&lt;&lt;</code> digunakan dengan cout, sedangkan <code>&gt;&gt;</code> digunakan dengan cin. Catatan: Pada simulator ini, input telah di-hardcode karena keterbatasan browser.",
-                code: `#include <iostream>\nusing namespace std;\n\nint main() {\n    string nama;\n    int umur;\n    \n    // Simulasi input (dalam browser)\n    nama = "Andi";\n    umur = 20;\n    \n    cout << "Program Simulasi Input" << endl;\n    cout << "=======================" << endl;\n    cout << "Nama yang diinput: " << nama << endl;\n    cout << "Umur yang diinput: " << umur << endl;\n    cout << endl;\n    cout << "Halo, " << nama << "!" << endl;\n    cout << "Umur kamu " << umur << " tahun." << endl;\n    \n    return 0;\n}`
+                explanation: "C++ menggunakan <code>cin</code> dan <code>cout</code> untuk interaksi.",
+                code: `#include <iostream>\nusing namespace std;\n\nint main() {\n    string nama = "Andi";\n    int umur = 20;\n    cout << "Halo, " << nama << "!" << endl;\n    cout << "Umur kamu " << umur << " tahun." << endl;\n    return 0;\n}`
             },
             operators: {
                 title: "🔢 Operators",
-                explanation: "Operator digunakan untuk melakukan operasi pada variabel. C++ memiliki operator aritmatika (+, -, *, /, %), operator perbandingan (==, !=, <, >, <=, >=), dan operator logika (&&, ||, !). Operator ini sangat penting dalam pemrograman.",
-                code: `#include <iostream>\nusing namespace std;\n\nint main() {\n    int a = 10;\n    int b = 3;\n    \n    cout << "Nilai a = " << a << endl;\n    cout << "Nilai b = " << b << endl;\n    cout << endl;\n    \n    cout << "Operator Aritmatika:" << endl;\n    cout << "a + b = " << (a + b) << endl;\n    cout << "a - b = " << (a - b) << endl;\n    cout << "a * b = " << (a * b) << endl;\n    cout << "a / b = " << (a / b) << endl;\n    cout << "a % b = " << (a % b) << endl;\n    cout << endl;\n    \n    cout << "Operator Perbandingan:" << endl;\n    cout << "a == b: " << (a == b) << endl;\n    cout << "a > b: " << (a > b) << endl;\n    cout << "a < b: " << (a < b) << endl;\n    \n    return 0;\n}`
+                explanation: "Operator digunakan untuk operasi matematika dan logika.",
+                code: `#include <iostream>\nusing namespace std;\n\nint main() {\n    int a = 10, b = 3;\n    cout << "a + b = " << (a + b) << endl;\n    cout << "a - b = " << (a - b) << endl;\n    cout << "a * b = " << (a * b) << endl;\n    cout << "a / b = " << (a / b) << endl;\n    return 0;\n}`
             },
             ifelse: {
                 title: "🔀 If-Else Statement",
-                explanation: "Statement if-else digunakan untuk membuat keputusan dalam program. Kode akan dijalankan berdasarkan kondisi yang diberikan. Jika kondisi <code>true</code>, blok if dijalankan. Jika <code>false</code>, blok else dijalankan. Kita juga bisa menggunakan <code>else if</code> untuk multiple kondisi.",
-                code: `#include <iostream>\nusing namespace std;\n\nint main() {\n    int nilai = 85;\n    \n    cout << "Nilai siswa: " << nilai << endl;\n    cout << endl;\n    \n    if (nilai >= 90) {\n        cout << "Grade: A (Excellent!)" << endl;\n    } else if (nilai >= 80) {\n        cout << "Grade: B (Good!)" << endl;\n    } else if (nilai >= 70) {\n        cout << "Grade: C (Fair)" << endl;\n    } else if (nilai >= 60) {\n        cout << "Grade: D (Pass)" << endl;\n    } else {\n        cout << "Grade: F (Fail)" << endl;\n    }\n    \n    // Contoh if-else sederhana\n    if (nilai >= 60) {\n        cout << "Status: LULUS" << endl;\n    } else {\n        cout << "Status: TIDAK LULUS" << endl;\n    }\n    \n    return 0;\n}`
+                explanation: "Kondisi digunakan untuk mengontrol alur program.",
+                code: `#include <iostream>\nusing namespace std;\n\nint main() {\n    int nilai = 85;\n    if (nilai >= 80) {\n        cout << "Lulus dengan nilai bagus!" << endl;\n    } else {\n        cout << "Perlu belajar lebih giat." << endl;\n    }\n    return 0;\n}`
             },
             loops: {
                 title: "🔁 Loops (For & While)",
-                explanation: "Loop digunakan untuk menjalankan kode berulang kali. <code>for loop</code> digunakan ketika kita tahu berapa kali loop akan berjalan. <code>while loop</code> digunakan ketika loop akan berjalan selama kondisi tertentu terpenuhi. Loop sangat berguna untuk mengulang tugas.",
-                code: `#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << "=== FOR LOOP ===" << endl;\n    cout << "Menghitung 1 sampai 5:" << endl;\n    for (int i = 1; i <= 5; i++) {\n        cout << i << " ";\n    }\n    cout << endl << endl;\n    \n    cout << "=== WHILE LOOP ===" << endl;\n    cout << "Menghitung mundur dari 5:" << endl;\n    int j = 5;\n    while (j > 0) {\n        cout << j << " ";\n        j--;\n    }\n    cout << endl << endl;\n    \n    cout << "=== NESTED LOOP ===" << endl;\n    cout << "Pola bintang:" << endl;\n    for (int row = 1; row <= 4; row++) {\n        for (int col = 1; col <= row; col++) {\n            cout << "* ";\n        }\n        cout << endl;\n    }\n    \n    return 0;\n}`
+                explanation: "Loop digunakan untuk mengulang eksekusi blok kode.",
+                code: `#include <iostream>\nusing namespace std;\n\nint main() {\n    for (int i = 1; i <= 5; i++) {\n        cout << i << " ";\n    }\n    return 0;\n}`
             },
             array: {
                 title: "📊 Arrays",
-                explanation: "Array adalah struktur data yang dapat menyimpan multiple nilai dengan tipe data yang sama. Setiap elemen dalam array memiliki index yang dimulai dari 0. Array sangat berguna untuk menyimpan koleksi data seperti daftar nilai, nama, atau angka.",
-                code: `#include <iostream>\nusing namespace std;\n\nint main() {\n    // Array dengan inisialisasi\n    int angka[5] = {10, 20, 30, 40, 50};\n    string buah[3] = {"Apel", "Jeruk", "Mangga"};\n    \n    cout << "=== Array Angka ===" << endl;\n    cout << "Menampilkan semua elemen:" << endl;\n    for (int i = 0; i < 5; i++) {\n        cout << "angka[" << i << "] = " << angka[i] << endl;\n    }\n    cout << endl;\n    \n    cout << "=== Array String ===" << endl;\n    for (int i = 0; i < 3; i++) {\n        cout << "Buah ke-" << (i+1) << ": " << buah[i] << endl;\n    }\n    cout << endl;\n    \n    cout << "=== Operasi Array ===" << endl;\n    int total = 0;\n    for (int i = 0; i < 5; i++) {\n        total += angka[i];\n    }\n    cout << "Total semua angka: " << total << endl;\n    cout << "Rata-rata: " << (total / 5) << endl;\n    \n    return 0;\n}`
+                explanation: "Array menyimpan banyak data dengan tipe yang sama.",
+                code: `#include <iostream>\nusing namespace std;\n\nint main() {\n    int angka[5] = {10, 20, 30, 40, 50};\n    for (int i = 0; i < 5; i++) {\n        cout << angka[i] << " ";\n    }\n    return 0;\n}`
             },
             function: {
                 title: "⚙️ Functions",
-                explanation: "Function adalah blok kode yang dapat dipanggil berulang kali. Function membantu membuat kode lebih terorganisir dan reusable. Function dapat menerima parameter (input) dan mengembalikan nilai (return). Setiap function harus dideklarasikan sebelum digunakan atau didefinisikan sebelum main().",
-                code: `#include <iostream>\nusing namespace std;\n\n// Function untuk menjumlahkan dua angka\nint tambah(int a, int b) {\n    return a + b;\n}\n\n// Function untuk menampilkan salam\nvoid sapa(string nama) {\n    cout << "Halo, " << nama << "!" << endl;\n}\n\n// Function untuk menghitung luas persegi panjang\nint luasPersegiPanjang(int panjang, int lebar) {\n    return panjang * lebar;\n}\n\n// Function untuk cek bilangan genap\nbool isGenap(int angka) {\n    return (angka % 2 == 0);\n}\n\nint main() {\n    cout << "=== Demo Functions ===" << endl;\n    cout << endl;\n    \n    // Memanggil function tambah\n    int hasil = tambah(5, 3);\n    cout << "5 + 3 = " << hasil << endl;\n    cout << endl;\n    \n    // Memanggil function sapa\n    sapa("Budi");\n    sapa("Ani");\n    cout << endl;\n    \n    // Memanggil function luas\n    int luas = luasPersegiPanjang(8, 5);\n    cout << "Luas persegi panjang (8x5): " << luas << endl;\n    cout << endl;\n    \n    // Memanggil function cek genap\n    cout << "Apakah 10 genap? " << (isGenap(10) ? "Ya" : "Tidak") << endl;\n    cout << "Apakah 7 genap? " << (isGenap(7) ? "Ya" : "Tidak") << endl;\n    \n    return 0;\n}`
+                explanation: "Fungsi digunakan untuk modularisasi program.",
+                code: `#include <iostream>\nusing namespace std;\n\nint tambah(int a, int b) {\n    return a + b;\n}\n\nint main() {\n    cout << tambah(5, 3);\n    return 0;\n}`
             }
         };
 
-        // Load example
-        function loadExample(exampleKey) {
+        // ==========================
+        // Load Example
+        // ==========================
+        function loadExample(exampleKey, element) {
             const example = examples[exampleKey];
             document.getElementById('explanation').innerHTML = `
                 <h3>${example.title}</h3>
                 <p>${example.explanation}</p>
             `;
             document.getElementById('codeEditor').value = example.code;
-            
-            // Update active state
-            document.querySelectorAll('.example-item').forEach(item => {
-                item.classList.remove('active');
-            });
-            event.target.classList.add('active');
-            
+            document.querySelectorAll('.example-item').forEach(i => i.classList.remove('active'));
+            element.classList.add('active');
             clearOutput();
+            saveUserCode(); // simpan otomatis
         }
 
-        // Event listeners for examples
         document.querySelectorAll('.example-item').forEach(item => {
             item.addEventListener('click', function() {
-                const exampleKey = this.getAttribute('data-example');
-                loadExample(exampleKey);
-                
-                // Update active class
-                document.querySelectorAll('.example-item').forEach(el => {
-                    el.classList.remove('active');
-                });
-                this.classList.add('active');
+                const key = this.getAttribute('data-example');
+                loadExample(key, this);
             });
         });
 
-        // Run code function
+        // ==========================
+        // Jalankan kode
+        // ==========================
         function runCode() {
             const code = document.getElementById('codeEditor').value;
             const output = document.getElementById('output');
-            
             output.innerHTML = '<span class="loading">⏳ Menjalankan kode...</span>';
-            
             setTimeout(() => {
-                // Check if JSCPP is loaded
-                if (typeof JSCPP === 'undefined') {
-                    output.innerHTML = '<span class="error">❌ Error: Library JSCPP gagal dimuat.\n\nSolusi:\n1. Pastikan Anda terhubung ke internet\n2. Refresh halaman (F5)\n3. Atau download file HTML ini dan jalankan secara lokal</span>';
-                    return;
-                }
-                
                 try {
                     let result = '';
-                    
-                    // Create custom cout handler
                     const exitCode = JSCPP.run(code, '', {
-                        stdio: {
-                            write: function(s) {
-                                result += s;
-                            }
-                        }
+                        stdio: { write: s => result += s }
                     });
-                    
-                    if (result.trim() === '') {
-                        output.innerHTML = '<span class="success">✅ Program berhasil dijalankan!\n\n(Tidak ada output)</span>';
-                    } else {
-                        output.innerHTML = '<span class="success">✅ Program berhasil dijalankan!\n\n</span>' + result;
-                    }
-                } catch (error) {
-                    let errorMsg = error.message || error.toString();
-                    output.innerHTML = '<span class="error">❌ Error: ' + errorMsg + '\n\nPeriksa kembali kode Anda dan pastikan syntax sudah benar.</span>';
+                    output.innerHTML = result.trim() === ''
+                        ? '<span class="success">✅ Program berhasil dijalankan! (Tidak ada output)</span>'
+                        : '<span class="success">✅ Program berhasil dijalankan!\n\n</span>' + result;
+                } catch (err) {
+                    output.innerHTML = `<span class="error">❌ Error:</span>\n<pre>${err.message}</pre>`;
                 }
             }, 500);
         }
 
-        // Clear output
+        // ==========================
+        // Hapus Output
+        // ==========================
         function clearOutput() {
             document.getElementById('output').textContent = 'Tekan tombol "Jalankan Kode" untuk melihat hasil...';
         }
 
-        // Keyboard shortcut Ctrl+Enter to run
-        document.getElementById('codeEditor').addEventListener('keydown', function(e) {
+        // ==========================
+        // Simpan ke File
+        // ==========================
+        function saveToFile() {
+            const code = document.getElementById('codeEditor').value;
+            const blob = new Blob([code], { type: 'text/plain' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'program.cpp';
+            link.click();
+        }
+
+        // ==========================
+        // Simpan Otomatis ke localStorage
+        // ==========================
+        const editor = document.getElementById('codeEditor');
+        editor.value = localStorage.getItem('userCode') || examples.hello.code;
+        document.getElementById('explanation').innerHTML = `
+            <h3>${examples.hello.title}</h3>
+            <p>${examples.hello.explanation}</p>
+        `;
+
+        editor.addEventListener('input', saveUserCode);
+        function saveUserCode() {
+            localStorage.setItem('userCode', editor.value);
+        }
+
+        // Shortcut Ctrl+Enter
+        editor.addEventListener('keydown', e => {
             if (e.ctrlKey && e.key === 'Enter') {
                 e.preventDefault();
                 runCode();

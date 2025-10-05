@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C++ Interactive Simulator</title>
+    <script src="JSCPP.es5.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 0;
+            min-height: 600px;
+        }
+
+        .sidebar {
+            background: #f8f9fa;
+            border-right: 2px solid #e9ecef;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .sidebar h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .example-item {
+            background: white;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .example-item:hover {
+            background: #667eea;
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .example-item.active {
+            background: #667eea;
+            color: white;
+            border-color: #764ba2;
+        }
+
+        .editor-section {
+            padding: 30px;
+        }
+
+        .concept-explanation {
+            background: #e7f3ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #667eea;
+        }
+
+        .concept-explanation h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .concept-explanation p {
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .editor-wrapper {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .editor-label {
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 300px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            resize: vertical;
+            background: #f8f9fa;
+            line-height: 1.5;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .run-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            flex: 1;
+        }
+
+        .run-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .clear-btn {
+            background: #6c757d;
+            color: white;
+        }
+
+        .clear-btn:hover {
+            background: #545b62;
+        }
+
+        .output-section {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 10px;
+            min-height: 150px;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .output-label {
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .error {
+            color: #ff6b6b;
+        }
+
+        .success {
+            color: #51cf66;
+        }
+
+        @media (max-width: 968px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                border-right: none;
+                border-bottom: 2px solid #e9ecef;
+            }
+
+            header h1 {
+                font-size: 1.8em;
+            }
+        }
+
+        .loading {
+            display: inline-block;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀 C++ Interactive Simulator</h1>
+            <p>Belajar C++ dengan cara yang menyenangkan dan interaktif</p>
+        </header>
+
+        <div class="main-content">
+            <div class="sidebar">
+                <h2>📚 Contoh Kode</h2>
+                <div class="example-list">
+                    <div class="example-item active" data-example="hello">
+                        Hello World
+                    </div>
+                    <div class="example-item" data-example="variables">
+                        Variables & Data Types
+                    </div>
+                    <div class="example-item" data-example="input">
+                        Input & Output
+                    </div>
+                    <div class="example-item" data-example="operators">
+                        Operators
+                    </div>
+                    <div class="example-item" data-example="ifelse">
+                        If-Else Statement
+                    </div>
+                    <div class="example-item" data-example="loops">
+                        Loops (For & While)
+                    </div>
+                    <div class="example-item" data-example="array">
+                        Arrays
+                    </div>
+                    <div class="example-item" data-example="function">
+                        Functions
+                    </div>
+                </div>
+            </div>
+
+            <div class="editor-section">
+                <div class="concept-explanation" id="explanation">
+                    <h3>👋 Hello World Program</h3>
+                    <p>Program pertama dalam C++ biasanya adalah "Hello World". Program ini menampilkan teks ke layar menggunakan <code>cout</code>. Header <code>&lt;iostream&gt;</code> diperlukan untuk input/output, dan <code>using namespace std;</code> memungkinkan kita menggunakan fungsi standar tanpa prefix <code>std::</code>.</p>
+                </div>
+
+                <label class="editor-label">💻 Editor Kode C++</label>
+                <div class="editor-wrapper">
+                    <textarea id="codeEditor">#include <iostream>
+using namespace std;
+
+int main() {
+    cout << "Hello, World!" << endl;
+    return 0;
+}</textarea>
+                </div>
+
+                <div class="button-group">
+                    <button class="run-btn" onclick="runCode()">▶️ Jalankan Kode</button>
+                    <button class="clear-btn" onclick="clearOutput()">🗑️ Hapus Output</button>
+                </div>
+
+                <label class="output-label">📤 Output</label>
+                <div class="output-section" id="output">
+                    Tekan tombol "Jalankan Kode" untuk melihat hasil...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const examples = {
+            hello: {
+                title: "👋 Hello World Program",
+                explanation: "Program pertama dalam C++ biasanya adalah \"Hello World\". Program ini menampilkan teks ke layar menggunakan <code>cout</code>. Header <code>&lt;iostream&gt;</code> diperlukan untuk input/output, dan <code>using namespace std;</code> memungkinkan kita menggunakan fungsi standar tanpa prefix <code>std::</code>.",
+                code: `#include <iostream>
+using namespace std;
+
+int main() {
+    cout << "Hello, World!" << endl;
+    return 0;
+}`
+            },
+            variables: {
+                title: "📦 Variables & Data Types",
+                explanation: "Variabel adalah wadah untuk menyimpan data. C++ memiliki berbagai tipe data seperti <code>int</code> (bilangan bulat), <code>float</code> dan <code>double</code> (bilangan desimal), <code>char</code> (karakter), dan <code>string</code> (teks). Setiap variabel harus dideklarasikan dengan tipe datanya.",
+                code: `#include <iostream>
+using namespace std;
+
+int main() {
+    int umur = 25;
+    float tinggi = 175.5;
+    char grade = 'A';
+    string nama = "Budi";
+    
+    cout << "Nama: " << nama << endl;
+    cout << "Umur: " << umur << " tahun" << endl;
+    cout << "Tinggi: " << tinggi << " cm" << endl;
+    cout << "Grade: " << grade << endl;
+    
+    return 0;
+}`
+            },
+            input: {
+                title: "⌨️ Input & Output",
+                explanation: "C++ menggunakan <code>cin</code> untuk menerima input dari user dan <code>cout</code> untuk menampilkan output. Operator <code>&lt;&lt;</code> digunakan dengan cout, sedangkan <code>&gt;&gt;</code> digunakan dengan cin. Catatan: Pada simulator ini, input telah di-hardcode karena keterbatasan browser.",
+                code: `#include <iostream>
+using namespace std;
+
+int main() {
+    string nama;
+    int umur;
+    
+    // Simulasi input (dalam browser)
+    nama = "Andi";
+    umur = 20;
+    
+    cout << "Program Simulasi Input" << endl;
+    cout << "=======================" << endl;
+    cout << "Nama yang diinput: " << nama << endl;
+    cout << "Umur yang diinput: " << umur << endl;
+    cout << endl;
+    cout << "Halo, " << nama << "!" << endl;
+    cout << "Umur kamu " << umur << " tahun." << endl;
+    
+    return 0;
+}`
+            },
+            operators: {
+                title: "🔢 Operators",
+                explanation: "Operator digunakan untuk melakukan operasi pada variabel. C++ memiliki operator aritmatika (+, -, *, /, %), operator perbandingan (==, !=, <, >, <=, >=), dan operator logika (&&, ||, !). Operator ini sangat penting dalam pemrograman.",
+                code: `#include <iostream>
+using namespace std;
+
+int main() {
+    int a = 10;
+    int b = 3;
+    
+    cout << "Nilai a = " << a << endl;
+    cout << "Nilai b = " << b << endl;
+    cout << endl;
+    
+    cout << "Operator Aritmatika:" << endl;
+    cout << "a + b = " << (a + b) << endl;
+    cout << "a - b = " << (a - b) << endl;
+    cout << "a * b = " << (a * b) << endl;
+    cout << "a / b = " << (a / b) << endl;
+    cout << "a % b = " << (a % b) << endl;
+    cout << endl;
+    
+    cout << "Operator Perbandingan:" << endl;
+    cout << "a == b: " << (a == b) << endl;
+    cout << "a > b: " << (a > b) << endl;
+    cout << "a < b: " << (a < b) << endl;
+    
+    return 0;
+}`
+            },
+            ifelse: {
+                title: "🔀 If-Else Statement",
+                explanation: "Statement if-else digunakan untuk membuat keputusan dalam program. Kode akan dijalankan berdasarkan kondisi yang diberikan. Jika kondisi <code>true</code>, blok if dijalankan. Jika <code>false</code>, blok else dijalankan. Kita juga bisa menggunakan <code>else if</code> untuk multiple kondisi.",
+                code: `#include <iostream>
+using namespace std;
+
+int main() {
+    int nilai = 85;
+    
+    cout << "Nilai siswa: " << nilai << endl;
+    cout << endl;
+    
+    if (nilai >= 90) {
+        cout << "Grade: A (Excellent!)" << endl;
+    } else if (nilai >= 80) {
+        cout << "Grade: B (Good!)" << endl;
+    } else if (nilai >= 70) {
+        cout << "Grade: C (Fair)" << endl;
+    } else if (nilai >= 60) {
+        cout << "Grade: D (Pass)" << endl;
+    } else {
+        cout << "Grade: F (Fail)" << endl;
+    }
+    
+    // Contoh if-else sederhana
+    if (nilai >= 60) {
+        cout << "Status: LULUS" << endl;
+    } else {
+        cout << "Status: TIDAK LULUS" << endl;
+    }
+    
+    return 0;
+}`
+            },
+            loops: {
+                title: "🔁 Loops (For & While)",
+                explanation: "Loop digunakan untuk menjalankan kode berulang kali. <code>for loop</code> digunakan ketika kita tahu berapa kali loop akan berjalan. <code>while loop</code> digunakan ketika loop akan berjalan selama kondisi tertentu terpenuhi. Loop sangat berguna untuk mengulang tugas.",
+                code: `#include <iostream>
+using namespace std;
+
+int main() {
+    cout << "=== FOR LOOP ===" << endl;
+    cout << "Menghitung 1 sampai 5:" << endl;
+    for (int i = 1; i <= 5; i++) {
+        cout << i << " ";
+    }
+    cout << endl << endl;
+    
+    cout << "=== WHILE LOOP ===" << endl;
+    cout << "Menghitung mundur dari 5:" << endl;
+    int j = 5;
+    while (j > 0) {
+        cout << j << " ";
+        j--;
+    }
+    cout << endl << endl;
+    
+    cout << "=== NESTED LOOP ===" << endl;
+    cout << "Pola bintang:" << endl;
+    for (int row = 1; row <= 4; row++) {
+        for (int col = 1; col <= row; col++) {
+            cout << "* ";
+        }
+        cout << endl;
+    }
+    
+    return 0;
+}`
+            },
+            array: {
+                title: "📊 Arrays",
+                explanation: "Array adalah struktur data yang dapat menyimpan multiple nilai dengan tipe data yang sama. Setiap elemen dalam array memiliki index yang dimulai dari 0. Array sangat berguna untuk menyimpan koleksi data seperti daftar nilai, nama, atau angka.",
+                code: `#include <iostream>
+using namespace std;
+
+int main() {
+    // Array dengan inisialisasi
+    int angka[5] = {10, 20, 30, 40, 50};
+    string buah[3] = {"Apel", "Jeruk", "Mangga"};
+    
+    cout << "=== Array Angka ===" << endl;
+    cout << "Menampilkan semua elemen:" << endl;
+    for (int i = 0; i < 5; i++) {
+        cout << "angka[" << i << "] = " << angka[i] << endl;
+    }
+    cout << endl;
+    
+    cout << "=== Array String ===" << endl;
+    for (int i = 0; i < 3; i++) {
+        cout << "Buah ke-" << (i+1) << ": " << buah[i] << endl;
+    }
+    cout << endl;
+    
+    cout << "=== Operasi Array ===" << endl;
+    int total = 0;
+    for (int i = 0; i < 5; i++) {
+        total += angka[i];
+    }
+    cout << "Total semua angka: " << total << endl;
+    cout << "Rata-rata: " << (total / 5) << endl;
+    
+    return 0;
+}`
+            },
+            function: {
+                title: "⚙️ Functions",
+                explanation: "Function adalah blok kode yang dapat dipanggil berulang kali. Function membantu membuat kode lebih terorganisir dan reusable. Function dapat menerima parameter (input) dan mengembalikan nilai (return). Setiap function harus dideklarasikan sebelum digunakan atau didefinisikan sebelum main().",
+                code: `#include <iostream>
+using namespace std;
+
+// Function untuk menjumlahkan dua angka
+int tambah(int a, int b) {
+    return a + b;
+}
+
+// Function untuk menampilkan salam
+void sapa(string nama) {
+    cout << "Halo, " << nama << "!" << endl;
+}
+
+// Function untuk menghitung luas persegi panjang
+int luasPersegiPanjang(int panjang, int lebar) {
+    return panjang * lebar;
+}
+
+// Function untuk cek bilangan genap
+bool isGenap(int angka) {
+    return (angka % 2 == 0);
+}
+
+int main() {
+    cout << "=== Demo Functions ===" << endl;
+    cout << endl;
+    
+    // Memanggil function tambah
+    int hasil = tambah(5, 3);
+    cout << "5 + 3 = " << hasil << endl;
+    cout << endl;
+    
+    // Memanggil function sapa
+    sapa("Budi");
+    sapa("Ani");
+    cout << endl;
+    
+    // Memanggil function luas
+    int luas = luasPersegiPanjang(8, 5);
+    cout << "Luas persegi panjang (8x5): " << luas << endl;
+    cout << endl;
+    
+    // Memanggil function cek genap
+    cout << "Apakah 10 genap? " << (isGenap(10) ? "Ya" : "Tidak") << endl;
+    cout << "Apakah 7 genap? " << (isGenap(7) ? "Ya" : "Tidak") << endl;
+    
+    return 0;
+}`
+            }
+        };
+
+        // Load example
+        function loadExample(exampleKey) {
+            const example = examples[exampleKey];
+            document.getElementById('explanation').innerHTML = `
+                <h3>${example.title}</h3>
+                <p>${example.explanation}</p>
+            `;
+            document.getElementById('codeEditor').value = example.code;
+            
+            // Update active state
+            document.querySelectorAll('.example-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            clearOutput();
+        }
+
+        // Event listeners for examples
+        document.querySelectorAll('.example-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const exampleKey = this.getAttribute('data-example');
+                loadExample(exampleKey);
+                
+                // Update active class
+                document.querySelectorAll('.example-item').forEach(el => {
+                    el.classList.remove('active');
+                });
+                this.classList.add('active');
+            });
+        });
+
+        // Run code function
+        function runCode() {
+            const code = document.getElementById('codeEditor').value;
+            const output = document.getElementById('output');
+            
+            output.innerHTML = '<span class="loading">⏳ Menjalankan kode...</span>';
+            
+            setTimeout(() => {
+                // Check if JSCPP is loaded
+                if (typeof JSCPP === 'undefined') {
+                    output.innerHTML = '<span class="error">❌ Error: Library JSCPP gagal dimuat.\n\nSolusi:\n1. Pastikan Anda terhubung ke internet\n2. Refresh halaman (F5)\n3. Atau download file HTML ini dan jalankan secara lokal</span>';
+                    return;
+                }
+                
+                try {
+                    let result = '';
+                    
+                    // Create custom cout handler
+                    const exitCode = JSCPP.run(code, '', {
+                        stdio: {
+                            write: function(s) {
+                                result += s;
+                            }
+                        }
+                    });
+                    
+                    if (result.trim() === '') {
+                        output.innerHTML = '<span class="success">✅ Program berhasil dijalankan!\n\n(Tidak ada output)</span>';
+                    } else {
+                        output.innerHTML = '<span class="success">✅ Program berhasil dijalankan!\n\n</span>' + result;
+                    }
+                } catch (error) {
+                    let errorMsg = error.message || error.toString();
+                    output.innerHTML = '<span class="error">❌ Error: ' + errorMsg + '\n\nPeriksa kembali kode Anda dan pastikan syntax sudah benar.</span>';
+                }
+            }, 500);
+        }
+
+        // Clear output
+        function clearOutput() {
+            document.getElementById('output').textContent = 'Tekan tombol "Jalankan Kode" untuk melihat hasil...';
+        }
+
+        // Keyboard shortcut Ctrl+Enter to run
+        document.getElementById('codeEditor').addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'Enter') {
+                e.preventDefault();
+                runCode();
+            }
+        });
+    </script>
+</body>
+</html>

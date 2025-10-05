@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>C++ Interactive Simulator</title>
-    <script src="JSCPP.es5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jscpp/dist/JSCPP.es5.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -301,244 +301,42 @@ int main() {
             hello: {
                 title: "👋 Hello World Program",
                 explanation: "Program pertama dalam C++ biasanya adalah \"Hello World\". Program ini menampilkan teks ke layar menggunakan <code>cout</code>. Header <code>&lt;iostream&gt;</code> diperlukan untuk input/output, dan <code>using namespace std;</code> memungkinkan kita menggunakan fungsi standar tanpa prefix <code>std::</code>.",
-                code: `#include <iostream>
-using namespace std;
-
-int main() {
-    cout << "Hello, World!" << endl;
-    return 0;
-}`
+                code: `#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << "Hello, World!" << endl;\n    return 0;\n}`
             },
             variables: {
                 title: "📦 Variables & Data Types",
                 explanation: "Variabel adalah wadah untuk menyimpan data. C++ memiliki berbagai tipe data seperti <code>int</code> (bilangan bulat), <code>float</code> dan <code>double</code> (bilangan desimal), <code>char</code> (karakter), dan <code>string</code> (teks). Setiap variabel harus dideklarasikan dengan tipe datanya.",
-                code: `#include <iostream>
-using namespace std;
-
-int main() {
-    int umur = 25;
-    float tinggi = 175.5;
-    char grade = 'A';
-    string nama = "Budi";
-    
-    cout << "Nama: " << nama << endl;
-    cout << "Umur: " << umur << " tahun" << endl;
-    cout << "Tinggi: " << tinggi << " cm" << endl;
-    cout << "Grade: " << grade << endl;
-    
-    return 0;
-}`
+                code: `#include <iostream>\nusing namespace std;\n\nint main() {\n    int umur = 25;\n    float tinggi = 175.5;\n    char grade = 'A';\n    string nama = "Budi";\n    \n    cout << "Nama: " << nama << endl;\n    cout << "Umur: " << umur << " tahun" << endl;\n    cout << "Tinggi: " << tinggi << " cm" << endl;\n    cout << "Grade: " << grade << endl;\n    \n    return 0;\n}`
             },
             input: {
                 title: "⌨️ Input & Output",
                 explanation: "C++ menggunakan <code>cin</code> untuk menerima input dari user dan <code>cout</code> untuk menampilkan output. Operator <code>&lt;&lt;</code> digunakan dengan cout, sedangkan <code>&gt;&gt;</code> digunakan dengan cin. Catatan: Pada simulator ini, input telah di-hardcode karena keterbatasan browser.",
-                code: `#include <iostream>
-using namespace std;
-
-int main() {
-    string nama;
-    int umur;
-    
-    // Simulasi input (dalam browser)
-    nama = "Andi";
-    umur = 20;
-    
-    cout << "Program Simulasi Input" << endl;
-    cout << "=======================" << endl;
-    cout << "Nama yang diinput: " << nama << endl;
-    cout << "Umur yang diinput: " << umur << endl;
-    cout << endl;
-    cout << "Halo, " << nama << "!" << endl;
-    cout << "Umur kamu " << umur << " tahun." << endl;
-    
-    return 0;
-}`
+                code: `#include <iostream>\nusing namespace std;\n\nint main() {\n    string nama;\n    int umur;\n    \n    // Simulasi input (dalam browser)\n    nama = "Andi";\n    umur = 20;\n    \n    cout << "Program Simulasi Input" << endl;\n    cout << "=======================" << endl;\n    cout << "Nama yang diinput: " << nama << endl;\n    cout << "Umur yang diinput: " << umur << endl;\n    cout << endl;\n    cout << "Halo, " << nama << "!" << endl;\n    cout << "Umur kamu " << umur << " tahun." << endl;\n    \n    return 0;\n}`
             },
             operators: {
                 title: "🔢 Operators",
                 explanation: "Operator digunakan untuk melakukan operasi pada variabel. C++ memiliki operator aritmatika (+, -, *, /, %), operator perbandingan (==, !=, <, >, <=, >=), dan operator logika (&&, ||, !). Operator ini sangat penting dalam pemrograman.",
-                code: `#include <iostream>
-using namespace std;
-
-int main() {
-    int a = 10;
-    int b = 3;
-    
-    cout << "Nilai a = " << a << endl;
-    cout << "Nilai b = " << b << endl;
-    cout << endl;
-    
-    cout << "Operator Aritmatika:" << endl;
-    cout << "a + b = " << (a + b) << endl;
-    cout << "a - b = " << (a - b) << endl;
-    cout << "a * b = " << (a * b) << endl;
-    cout << "a / b = " << (a / b) << endl;
-    cout << "a % b = " << (a % b) << endl;
-    cout << endl;
-    
-    cout << "Operator Perbandingan:" << endl;
-    cout << "a == b: " << (a == b) << endl;
-    cout << "a > b: " << (a > b) << endl;
-    cout << "a < b: " << (a < b) << endl;
-    
-    return 0;
-}`
+                code: `#include <iostream>\nusing namespace std;\n\nint main() {\n    int a = 10;\n    int b = 3;\n    \n    cout << "Nilai a = " << a << endl;\n    cout << "Nilai b = " << b << endl;\n    cout << endl;\n    \n    cout << "Operator Aritmatika:" << endl;\n    cout << "a + b = " << (a + b) << endl;\n    cout << "a - b = " << (a - b) << endl;\n    cout << "a * b = " << (a * b) << endl;\n    cout << "a / b = " << (a / b) << endl;\n    cout << "a % b = " << (a % b) << endl;\n    cout << endl;\n    \n    cout << "Operator Perbandingan:" << endl;\n    cout << "a == b: " << (a == b) << endl;\n    cout << "a > b: " << (a > b) << endl;\n    cout << "a < b: " << (a < b) << endl;\n    \n    return 0;\n}`
             },
             ifelse: {
                 title: "🔀 If-Else Statement",
                 explanation: "Statement if-else digunakan untuk membuat keputusan dalam program. Kode akan dijalankan berdasarkan kondisi yang diberikan. Jika kondisi <code>true</code>, blok if dijalankan. Jika <code>false</code>, blok else dijalankan. Kita juga bisa menggunakan <code>else if</code> untuk multiple kondisi.",
-                code: `#include <iostream>
-using namespace std;
-
-int main() {
-    int nilai = 85;
-    
-    cout << "Nilai siswa: " << nilai << endl;
-    cout << endl;
-    
-    if (nilai >= 90) {
-        cout << "Grade: A (Excellent!)" << endl;
-    } else if (nilai >= 80) {
-        cout << "Grade: B (Good!)" << endl;
-    } else if (nilai >= 70) {
-        cout << "Grade: C (Fair)" << endl;
-    } else if (nilai >= 60) {
-        cout << "Grade: D (Pass)" << endl;
-    } else {
-        cout << "Grade: F (Fail)" << endl;
-    }
-    
-    // Contoh if-else sederhana
-    if (nilai >= 60) {
-        cout << "Status: LULUS" << endl;
-    } else {
-        cout << "Status: TIDAK LULUS" << endl;
-    }
-    
-    return 0;
-}`
+                code: `#include <iostream>\nusing namespace std;\n\nint main() {\n    int nilai = 85;\n    \n    cout << "Nilai siswa: " << nilai << endl;\n    cout << endl;\n    \n    if (nilai >= 90) {\n        cout << "Grade: A (Excellent!)" << endl;\n    } else if (nilai >= 80) {\n        cout << "Grade: B (Good!)" << endl;\n    } else if (nilai >= 70) {\n        cout << "Grade: C (Fair)" << endl;\n    } else if (nilai >= 60) {\n        cout << "Grade: D (Pass)" << endl;\n    } else {\n        cout << "Grade: F (Fail)" << endl;\n    }\n    \n    // Contoh if-else sederhana\n    if (nilai >= 60) {\n        cout << "Status: LULUS" << endl;\n    } else {\n        cout << "Status: TIDAK LULUS" << endl;\n    }\n    \n    return 0;\n}`
             },
             loops: {
                 title: "🔁 Loops (For & While)",
                 explanation: "Loop digunakan untuk menjalankan kode berulang kali. <code>for loop</code> digunakan ketika kita tahu berapa kali loop akan berjalan. <code>while loop</code> digunakan ketika loop akan berjalan selama kondisi tertentu terpenuhi. Loop sangat berguna untuk mengulang tugas.",
-                code: `#include <iostream>
-using namespace std;
-
-int main() {
-    cout << "=== FOR LOOP ===" << endl;
-    cout << "Menghitung 1 sampai 5:" << endl;
-    for (int i = 1; i <= 5; i++) {
-        cout << i << " ";
-    }
-    cout << endl << endl;
-    
-    cout << "=== WHILE LOOP ===" << endl;
-    cout << "Menghitung mundur dari 5:" << endl;
-    int j = 5;
-    while (j > 0) {
-        cout << j << " ";
-        j--;
-    }
-    cout << endl << endl;
-    
-    cout << "=== NESTED LOOP ===" << endl;
-    cout << "Pola bintang:" << endl;
-    for (int row = 1; row <= 4; row++) {
-        for (int col = 1; col <= row; col++) {
-            cout << "* ";
-        }
-        cout << endl;
-    }
-    
-    return 0;
-}`
+                code: `#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << "=== FOR LOOP ===" << endl;\n    cout << "Menghitung 1 sampai 5:" << endl;\n    for (int i = 1; i <= 5; i++) {\n        cout << i << " ";\n    }\n    cout << endl << endl;\n    \n    cout << "=== WHILE LOOP ===" << endl;\n    cout << "Menghitung mundur dari 5:" << endl;\n    int j = 5;\n    while (j > 0) {\n        cout << j << " ";\n        j--;\n    }\n    cout << endl << endl;\n    \n    cout << "=== NESTED LOOP ===" << endl;\n    cout << "Pola bintang:" << endl;\n    for (int row = 1; row <= 4; row++) {\n        for (int col = 1; col <= row; col++) {\n            cout << "* ";\n        }\n        cout << endl;\n    }\n    \n    return 0;\n}`
             },
             array: {
                 title: "📊 Arrays",
                 explanation: "Array adalah struktur data yang dapat menyimpan multiple nilai dengan tipe data yang sama. Setiap elemen dalam array memiliki index yang dimulai dari 0. Array sangat berguna untuk menyimpan koleksi data seperti daftar nilai, nama, atau angka.",
-                code: `#include <iostream>
-using namespace std;
-
-int main() {
-    // Array dengan inisialisasi
-    int angka[5] = {10, 20, 30, 40, 50};
-    string buah[3] = {"Apel", "Jeruk", "Mangga"};
-    
-    cout << "=== Array Angka ===" << endl;
-    cout << "Menampilkan semua elemen:" << endl;
-    for (int i = 0; i < 5; i++) {
-        cout << "angka[" << i << "] = " << angka[i] << endl;
-    }
-    cout << endl;
-    
-    cout << "=== Array String ===" << endl;
-    for (int i = 0; i < 3; i++) {
-        cout << "Buah ke-" << (i+1) << ": " << buah[i] << endl;
-    }
-    cout << endl;
-    
-    cout << "=== Operasi Array ===" << endl;
-    int total = 0;
-    for (int i = 0; i < 5; i++) {
-        total += angka[i];
-    }
-    cout << "Total semua angka: " << total << endl;
-    cout << "Rata-rata: " << (total / 5) << endl;
-    
-    return 0;
-}`
+                code: `#include <iostream>\nusing namespace std;\n\nint main() {\n    // Array dengan inisialisasi\n    int angka[5] = {10, 20, 30, 40, 50};\n    string buah[3] = {"Apel", "Jeruk", "Mangga"};\n    \n    cout << "=== Array Angka ===" << endl;\n    cout << "Menampilkan semua elemen:" << endl;\n    for (int i = 0; i < 5; i++) {\n        cout << "angka[" << i << "] = " << angka[i] << endl;\n    }\n    cout << endl;\n    \n    cout << "=== Array String ===" << endl;\n    for (int i = 0; i < 3; i++) {\n        cout << "Buah ke-" << (i+1) << ": " << buah[i] << endl;\n    }\n    cout << endl;\n    \n    cout << "=== Operasi Array ===" << endl;\n    int total = 0;\n    for (int i = 0; i < 5; i++) {\n        total += angka[i];\n    }\n    cout << "Total semua angka: " << total << endl;\n    cout << "Rata-rata: " << (total / 5) << endl;\n    \n    return 0;\n}`
             },
             function: {
                 title: "⚙️ Functions",
                 explanation: "Function adalah blok kode yang dapat dipanggil berulang kali. Function membantu membuat kode lebih terorganisir dan reusable. Function dapat menerima parameter (input) dan mengembalikan nilai (return). Setiap function harus dideklarasikan sebelum digunakan atau didefinisikan sebelum main().",
-                code: `#include <iostream>
-using namespace std;
-
-// Function untuk menjumlahkan dua angka
-int tambah(int a, int b) {
-    return a + b;
-}
-
-// Function untuk menampilkan salam
-void sapa(string nama) {
-    cout << "Halo, " << nama << "!" << endl;
-}
-
-// Function untuk menghitung luas persegi panjang
-int luasPersegiPanjang(int panjang, int lebar) {
-    return panjang * lebar;
-}
-
-// Function untuk cek bilangan genap
-bool isGenap(int angka) {
-    return (angka % 2 == 0);
-}
-
-int main() {
-    cout << "=== Demo Functions ===" << endl;
-    cout << endl;
-    
-    // Memanggil function tambah
-    int hasil = tambah(5, 3);
-    cout << "5 + 3 = " << hasil << endl;
-    cout << endl;
-    
-    // Memanggil function sapa
-    sapa("Budi");
-    sapa("Ani");
-    cout << endl;
-    
-    // Memanggil function luas
-    int luas = luasPersegiPanjang(8, 5);
-    cout << "Luas persegi panjang (8x5): " << luas << endl;
-    cout << endl;
-    
-    // Memanggil function cek genap
-    cout << "Apakah 10 genap? " << (isGenap(10) ? "Ya" : "Tidak") << endl;
-    cout << "Apakah 7 genap? " << (isGenap(7) ? "Ya" : "Tidak") << endl;
-    
-    return 0;
-}`
+                code: `#include <iostream>\nusing namespace std;\n\n// Function untuk menjumlahkan dua angka\nint tambah(int a, int b) {\n    return a + b;\n}\n\n// Function untuk menampilkan salam\nvoid sapa(string nama) {\n    cout << "Halo, " << nama << "!" << endl;\n}\n\n// Function untuk menghitung luas persegi panjang\nint luasPersegiPanjang(int panjang, int lebar) {\n    return panjang * lebar;\n}\n\n// Function untuk cek bilangan genap\nbool isGenap(int angka) {\n    return (angka % 2 == 0);\n}\n\nint main() {\n    cout << "=== Demo Functions ===" << endl;\n    cout << endl;\n    \n    // Memanggil function tambah\n    int hasil = tambah(5, 3);\n    cout << "5 + 3 = " << hasil << endl;\n    cout << endl;\n    \n    // Memanggil function sapa\n    sapa("Budi");\n    sapa("Ani");\n    cout << endl;\n    \n    // Memanggil function luas\n    int luas = luasPersegiPanjang(8, 5);\n    cout << "Luas persegi panjang (8x5): " << luas << endl;\n    cout << endl;\n    \n    // Memanggil function cek genap\n    cout << "Apakah 10 genap? " << (isGenap(10) ? "Ya" : "Tidak") << endl;\n    cout << "Apakah 7 genap? " << (isGenap(7) ? "Ya" : "Tidak") << endl;\n    \n    return 0;\n}`
             }
         };
 
